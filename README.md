@@ -1,14 +1,3 @@
-Project 07: AI Merchant Underwriting Agent
-for GrabCredit & GrabInsurance
-
-Build an AI agent that assesses GrabOn's 3,500 active merchant partners for embedded credit
-limits and insurance coverage, generating explainable pre-approved offers delivered via
-WhatsApp
-
-The Challenge:
-GrabCredit and GrabInsurance are not just consumer products — GrabOn's 3,500 merchant
-partners are equally valuable targets for embedded financial products. A small fashion merchant on GrabOn with stable GMV and growing return customers is a perfect candidate for a working capital loan or business interruption insurance. This project builds the AI underwriting agent that identifies them and makes an offer.
-
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
