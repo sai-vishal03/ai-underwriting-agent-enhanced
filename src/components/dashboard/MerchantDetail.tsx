@@ -284,11 +284,11 @@ export default function MerchantDetail({ merchant, result, onNotify, onAccept, n
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-10 border-y border-zinc-800/50 py-10">
             <div className="space-y-1">
               <div className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.3em]">Limit Amount</div>
-              <div className="text-4xl lg:text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.creditOffer.limit * 100000)}</div>
+              <div className="text-xl lg:text-2xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.creditOffer.limit * 100000)}</div>
             </div>
             <div className="sm:border-l border-zinc-800/50 sm:pl-10 space-y-1">
               <div className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.3em]">Interest Rate</div>
-              <div className="text-4xl lg:text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{result.creditOffer.interestRate}<span className="text-xl font-medium ml-1">%</span><span className="text-[10px] text-zinc-500 ml-2 uppercase font-black tracking-widest">APR</span></div>
+              <div className="text-xl lg:text-2xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{result.creditOffer.interestRate}<span className="text-xl font-medium ml-1">%</span><span className="text-[10px] text-zinc-500 ml-2 uppercase font-black tracking-widest">APR</span></div>
             </div>
           </div>
 
@@ -356,11 +356,11 @@ export default function MerchantDetail({ merchant, result, onNotify, onAccept, n
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-10 border-y border-zinc-800/50 py-10">
             <div className="space-y-1">
               <div className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.3em]">Coverage Amount</div>
-              <div className="text-4xl lg:text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.insuranceOffer.coverageAmount * 100000)}</div>
+              <div className="text-xl lg:text-2xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.insuranceOffer.coverageAmount * 100000)}</div>
             </div>
             <div className="sm:border-l border-zinc-800/50 sm:pl-10 space-y-1">
               <div className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.3em]">Annual Premium</div>
-              <div className="text-4xl lg:text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.insuranceOffer.premium)}<span className="text-sm font-medium ml-1">/ YR</span></div>
+              <div className="text-xl lg:text-2xl font-black text-white tabular-nums tracking-tighter drop-shadow-md">{formatCurrency(result.insuranceOffer.premium)}<span className="text-sm font-medium ml-1">/ YR</span></div>
             </div>
           </div>
 
