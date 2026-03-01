@@ -1,4 +1,3 @@
-```markdown
 # 🚀 AI Merchant Underwriting Agent for GrabCredit & GrabInsurance
 
 An AI-powered merchant underwriting platform that transforms GrabOn’s transaction intelligence into **explainable, risk-calibrated credit and insurance offers**.
