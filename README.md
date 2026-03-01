@@ -1,5 +1,3 @@
----
-
 # 🚀 AI Merchant Underwriting Agent
 
 ### GrabCredit & GrabInsurance | AI Labs – Founder’s Office
