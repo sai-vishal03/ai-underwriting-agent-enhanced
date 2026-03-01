@@ -1,80 +1,296 @@
-Project 07: AI Merchant Underwriting Agent for GrabCredit & GrabInsurance
+---
 
-Aim: Build an AI agent that assesses GrabOn's 3,500 active merchant partners for embedded credit
-limits and insurance coverage, generating explainable pre-approved offers delivered via WhatsApp
+# 🚀 AI Merchant Underwriting Agent
 
-Why This Matters for GrabOn:
-Poonawalla Fincorp's NBFC license enables GrabOn to offer merchant lending. The
-underwriting data advantage is enormous: GrabOn has 12 months of GMV, transaction velocity,
-deal redemption quality, and customer return rates for every merchant on its platform.
-Traditional banks don't have this. This project turns that data into a working credit and insurance
-underwriting engine.
+### GrabCredit & GrabInsurance | AI Labs – Founder’s Office
 
-Technical Requirements:
-• Design a comprehensive merchant profile schema: merchant_id, category,
-monthly_gmv_12m (array), coupon_redemption_rate, unique_customer_count,
-customer_return_rate, avg_order_value, seasonality_index (peak vs. trough GMV ratio),
-deal_exclusivity_rate, return_and_refund_rate
-• Build a Claude underwriting agent with two modes: GrabCredit mode (outputs working
-capital credit limit in ₹ lakhs, interest rate tier, tenure options) and GrabInsurance mode
-(outputs business interruption coverage amount, premium quote, suggested policy type)
-• The agent's decisions must be fully explainable: every offer must include a 3-5 sentence
-rationale that references specific data points from the merchant's profile — 'We are
-offering ₹15L at Tier 2 rates because your GMV has grown 38% YoY, your customer
-return rate of 71% indicates demand stability, and your refund rate of 2.1% is below the
-category average of 4.8%'
-• Build a risk tiering system: Tier 1 (low risk, best rates), Tier 2 (moderate risk, standard
-rates), Tier 3 (high risk, requires manual review) — with clear criteria for each tier
-• Integrate with WhatsApp Business API (or Twilio sandbox): the agent sends a pre-
-approved offer message to the merchant's registered WhatsApp number. Message must
-be formatted as a proper business notification, not a text dump
-• Build a merchant dashboard showing all 10 sample merchants: offer status, credit limit,
-insurance quote, risk tier, and a one-click 'Accept Offer' flow that triggers a mock NACH
-mandate
+Live Demo:
+👉 [https://ai-underwriting-agent-grabon.vercel.app/](https://ai-underwriting-agent-grabon.vercel.app/)
 
-What to Submit:
-A working underwriting agent processing 10 diverse merchant profiles (covering Tier 1 through
-Tier 3 outcomes, different categories, including at least 2 rejection scenarios with clear
-explanations). Live demo of WhatsApp offer delivery for at least 2 merchants.
+---
 
-Here is how you can get started:
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📌 Overview
 
-## Getting Started
+This project is an AI-powered underwriting platform built for GrabOn’s merchant ecosystem.
 
-First, run the development server:
+It evaluates merchant partners and generates **pre-approved working capital loans and insurance offers** using their performance data.
+
+The system is designed to simulate how a real NBFC (Non-Banking Financial Company) would:
+
+* Assess merchant risk
+* Price loans dynamically
+* Estimate expected losses
+* Monitor portfolio exposure
+* Send structured financial offers via WhatsApp
+
+This is not just a dashboard.
+It is a simplified **credit risk engine**.
+
+---
+
+# 🎯 Why This Matters
+
+GrabOn has a strong data advantage:
+
+* 12 months of GMV history
+* Customer return rates
+* Refund rates
+* Deal performance
+* Transaction velocity
+
+Traditional banks do not have this level of platform insight.
+
+This project turns that merchant data into:
+
+* Risk tiers
+* Credit limits
+* Insurance coverage
+* Risk-adjusted pricing
+* Explainable underwriting decisions
+
+---
+
+# 🧠 What This System Does
+
+For each merchant, the platform:
+
+1. Analyzes 12-month performance data
+2. Calculates a Risk Score (0–100)
+3. Assigns Risk Tier (Tier 1 / Tier 2 / Tier 3 / Reject)
+4. Calculates:
+
+   * Credit Limit
+   * Interest Rate (risk-based pricing)
+   * Probability of Default (PD)
+   * Expected Loss
+   * RAROC (Risk Adjusted Return on Capital)
+5. Generates a clear, data-backed explanation
+6. Sends a formatted WhatsApp offer (Admin only)
+
+---
+
+# 🏦 Financial Intelligence Engine
+
+The system includes simplified NBFC-grade logic:
+
+## ✅ Risk-Based Pricing
+
+Interest rate increases as risk score decreases.
+
+Base Rate + Risk Premium
+Higher risk → Higher pricing
+
+---
+
+## ✅ Probability of Default (PD)
+
+Risk score is converted into estimated default probability using a logistic model.
+
+Higher volatility or refund rate → Higher PD
+
+---
+
+## ✅ Expected Loss (EL)
+
+EL = PD × LGD × Exposure
+
+This estimates potential capital loss.
+
+---
+
+## ✅ RAROC (Profitability Check)
+
+RAROC measures if the loan generates sufficient return after adjusting for risk.
+
+If profitability is too low → flagged for review.
+
+---
+
+## ✅ Early Delinquency Monitoring
+
+After disbursement simulation, the system monitors:
+
+* GMV drop
+* Refund spike
+* Retention decline
+
+If deterioration is detected → risk metrics are recalculated.
+
+---
+
+# 📊 Dashboard Features
+
+The platform includes:
+
+* Merchant list view
+* 12-month GMV momentum visualization
+* Risk benchmark comparison
+* Risk score breakdown
+* Credit & Insurance offer panel
+* Accepted offers tracking
+* Settlement simulation (24-hour reflection)
+* System Outbox (WhatsApp logs)
+* Admin System Logs (audit trail)
+
+---
+
+# 🔐 Role-Based Access Control
+
+Two login roles:
+
+## 👤 Normal User
+
+* View merchant data
+* View underwriting results
+* View explanations
+* Cannot send financial offers
+* Cannot edit data
+
+## 👨‍💼 Admin
+
+* Add / edit merchants
+* Trigger underwriting
+* Send WhatsApp offers
+* Simulate acceptance & settlement
+* View system logs
+* Override decisions (committee simulation)
+
+This mirrors real financial governance.
+
+---
+
+# 📜 System Logs (Governance)
+
+Every action is logged:
+
+* Login / Logout
+* Merchant added
+* Offer generated
+* Notification sent
+* Offer accepted
+* Settlement updated
+
+This simulates enterprise-grade audit compliance.
+
+---
+
+# 📦 Merchant Data Schema
+
+Each merchant includes:
+
+* merchant_id
+* category
+* monthly_gmv_12m
+* coupon_redemption_rate
+* unique_customer_count
+* customer_return_rate
+* avg_order_value
+* seasonality_index
+* deal_exclusivity_rate
+* return_and_refund_rate
+
+---
+
+# 📱 WhatsApp Integration
+
+The system integrates with WhatsApp Business API (sandbox).
+
+Features:
+
+* Structured business notification
+* Offer preview before sending
+* Persistent notification log
+* Multiple merchant tracking
+
+Only Admin can send financial communication.
+
+---
+
+# 🧪 Stress Testing
+
+The system includes stress scenarios such as:
+
+* High refund spike
+* Extreme GMV volatility
+* Rapid decline in sales
+* Seasonal concentration risk
+* Low profitability (RAROC below threshold)
+
+This demonstrates real-world underwriting resilience.
+
+---
+
+# 🏗 Tech Stack
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* Claude (LLM underwriting agent)
+* WhatsApp API / Twilio Sandbox
+* Vercel Deployment
+
+---
+
+# ⚙️ Getting Started (Local Development)
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# 🌍 Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Deployed on Vercel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[https://ai-underwriting-agent-grabon.vercel.app/](https://ai-underwriting-agent-grabon.vercel.app/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# 💡 Key Highlights
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project demonstrates:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* AI-powered underwriting
+* Explainable decisioning
+* Risk-based pricing
+* Credit risk modeling
+* Portfolio exposure management
+* Governance & audit logging
+* Role-based financial controls
 
-**Website Link:** https://ai-underwriting-agent-grabon.vercel.app/
+It simulates how embedded lending can be operationalized inside a commerce platform.
 
+---
 
+# 📈 Future Enhancements (Optional)
+
+* Portfolio concentration heatmap
+* Monte Carlo stress testing
+* Capital adequacy simulation
+* Automated risk committee workflow
+* Real payment gateway integration
+
+---
+
+# 🏁 Conclusion
+
+This is a production-style simulation of:
+
+AI + Embedded Finance + Risk Governance
+
+Built to demonstrate how GrabOn can transform merchant data into intelligent financial products.
+
+---
