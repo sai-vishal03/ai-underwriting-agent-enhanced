@@ -11,7 +11,7 @@ export async function GET() {
         take: 50
       }),
       prisma.auditLog.findMany({
-        orderBy: { timestamp: 'desc' },
+        orderBy: { created_at: 'desc' },
         take: 50
       })
     ]);
