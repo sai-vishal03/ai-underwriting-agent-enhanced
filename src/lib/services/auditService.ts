@@ -3,49 +3,46 @@ import { logger } from '@/lib/logger';
 
 export interface AuditEntry {
   action: string;
-  actorId?: string;
-  actorRole?: string;
-  merchantId?: string;
-  entityId?: string;
+  actor_id?: string;
+  actor_role?: string;
+  entity_type?: string;
+  entity_id?: string;
   payload?: Record<string, unknown>;
   status?: 'SUCCESS' | 'FAILURE';
-  ipAddress?: string;
+  ip_address?: string;
 }
 
 export class AuditService {
   /**
    * Record an audit event — fire-and-forget by default.
-   * All financial actions (offer acceptance, settlement, risk AI generation)
-   * must be audited for full traceability.
    */
   async record(entry: AuditEntry): Promise<void> {
     try {
       await prisma.auditLog.create({
         data: {
           action: entry.action,
-          actorId: entry.actorId ?? 'SYSTEM',
-          actorRole: entry.actorRole ?? 'SYSTEM',
-          merchantId: entry.merchantId,
-          entityId: entry.entityId,
-          payload: entry.payload ? JSON.stringify(entry.payload) : null,
+          actor_id: entry.actor_id ?? 'SYSTEM',
+          actor_role: entry.actor_role ?? 'SYSTEM',
+          entity_type: entry.entity_type,
+          entity_id: entry.entity_id,
+          payload_snapshot: entry.payload ? JSON.stringify(entry.payload) : null,
           status: entry.status ?? 'SUCCESS',
-          ipAddress: entry.ipAddress,
+          ip_address: entry.ip_address,
         },
       });
-      logger.info('audit_log_recorded', { action: entry.action, entity_id: entry.entityId });
+      logger.info('audit_log_recorded', { action: entry.action, entity_id: entry.entity_id });
     } catch (error) {
-      // Audit failures should never crash the main flow
       logger.error('audit_log_error', { action: entry.action }, error as Error);
     }
   }
 
   /**
-   * Fetch audit trail for a specific merchant or globally.
+   * Fetch audit trail for a specific entity or globally.
    */
-  async getTrail(merchantId?: string, limit: number = 50) {
+  async getTrail(entityId?: string, limit: number = 50) {
     return prisma.auditLog.findMany({
-      where: merchantId ? { merchantId } : undefined,
-      orderBy: { timestamp: 'desc' },
+      where: entityId ? { entity_id: entityId } : undefined,
+      orderBy: { created_at: 'desc' },
       take: limit,
     });
   }

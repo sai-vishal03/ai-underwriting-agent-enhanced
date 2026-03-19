@@ -20,9 +20,10 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     await auditService.record({
       action: 'UNDERWRITE_RUN',
-      merchantId,
+      entity_type: 'Merchant',
+      entity_id: merchantId,
       payload: { tier: result.creditOffer.tier, riskScore: result.riskScore },
-      ipAddress: ip,
+      ip_address: ip,
     });
 
     return NextResponse.json({ success: true, result });

@@ -119,8 +119,8 @@ export class SettlementService {
 
           await auditService.record({
             action: 'SETTLEMENT_COMPLETED',
-            merchantId: offer.merchantId,
-            entityId: offer.id,
+            entity_type: 'AcceptedOffer',
+            entity_id: offer.id,
             payload: { type: offer.type, amount: offer.amount },
           });
 
@@ -145,8 +145,8 @@ export class SettlementService {
             await auditService.record({
               action: 'SETTLEMENT_FAILED',
               status: 'FAILURE',
-              merchantId: offer.merchantId,
-              entityId: offer.id,
+              entity_type: 'AcceptedOffer',
+              entity_id: offer.id,
               payload: { type: offer.type, amount: offer.amount, retries: currentRetries, error: String(processError) },
             });
 

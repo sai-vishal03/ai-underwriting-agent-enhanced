@@ -103,9 +103,10 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     await auditService.record({
       action: 'RISK_AI_GEN',
-      merchantId,
+      entity_type: 'Merchant',
+      entity_id: merchantId,
       payload: { confidence_score, risk_level, tier: merchant.underwriting.credit_tier },
-      ipAddress: ip,
+      ip_address: ip,
     });
 
     logger.info('risk_review_generated', { merchant_id: merchantId, tier: merchant.underwriting.credit_tier, confidence_score, risk_level });

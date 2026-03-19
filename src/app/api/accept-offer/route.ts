@@ -42,12 +42,12 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     await auditService.record({
       action: 'OFFER_ACCEPTED',
-      actorRole: req.headers.get('x-user-role') ?? 'Admin',
-      actorId: req.headers.get('x-user-id') ?? undefined,
-      merchantId,
-      entityId: offer.id,
+      actor_role: req.headers.get('x-user-role') ?? 'Admin',
+      actor_id: req.headers.get('x-user-id') ?? undefined,
+      entity_type: 'AcceptedOffer',
+      entity_id: offer.id,
       payload: { type, amount, idempotencyKey },
-      ipAddress: ip,
+      ip_address: ip,
     });
 
     return NextResponse.json({ success: true, offerId: offer.id });

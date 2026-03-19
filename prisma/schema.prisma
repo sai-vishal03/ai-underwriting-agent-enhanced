@@ -101,16 +101,16 @@ model AcceptedOffer {
 }
 
 model AuditLog {
-  id            String   @id @default(cuid())
-  action        String   // e.g. "OFFER_ACCEPTED", "MERCHANT_CREATED", "RISK_AI_GEN"
-  actorId       String?  // user.id or "SYSTEM"
-  actorRole     String?
-  merchantId    String?
-  entityId      String?  // e.g. AcceptedOffer.id
-  payload       String?  // JSON snapshot of the request/data
-  status        String   @default("SUCCESS") // "SUCCESS" | "FAILURE"
-  ipAddress     String?
-  timestamp     DateTime @default(now())
+  id               String   @id @default(cuid())
+  action           String   // e.g. "OFFER_ACCEPTED", "MERCHANT_CREATED", "RISK_AI_GEN"
+  actor_role       String?
+  actor_id         String?
+  entity_type      String?  // e.g. "AcceptedOffer", "Merchant"
+  entity_id        String?
+  payload_snapshot String?  // JSON snapshot
+  status           String   @default("SUCCESS") // "SUCCESS" | "FAILURE"
+  ip_address       String?
+  created_at       DateTime @default(now())
 }
 
 model PlatformStat {
