@@ -42,27 +42,25 @@ export default function LoginPage() {
     { label: '1 Special Character', met: /[!@#$%^&*(),.?":{}|<>]/.test(password) }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    setTimeout(() => {
-      const success = login(email, password);
-      if (success) {
-        toast.success(`Welcome back, ${email.split('@')[0]}!`);
-        router.push('/');
-      } else {
-        setError('Invalid credentials or password rules not met.');
-        toast.error('Authentication Failed');
-        setLoading(false);
-      }
-    }, 1000);
+    const success = await login(email, password);
+    if (success) {
+      toast.success(`Welcome back, ${email.split('@')[0]}!`);
+      router.push('/');
+    } else {
+      setError('Invalid credentials or password rules not met.');
+      toast.error('Authentication Failed');
+      setLoading(false);
+    }
   };
 
   const setAdminDemo = () => {
-    setEmail('AIVibeCoder@Grabon.com');
-    setPassword('3338582');
+    setEmail('admin@grabon.in');
+    setPassword('admin123');
     setTab('admin');
   };
 

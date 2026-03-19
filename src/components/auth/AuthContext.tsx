@@ -11,60 +11,68 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password?: string) => boolean;
-  logout: () => void;
+  login: (email: string, password?: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  loadingInitial?: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('grabon_user');
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+
+  const [loadingInitial, setLoadingInitial] = useState(true);
 
   useEffect(() => {
-    // Sync with localStorage if it changes in other tabs
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'grabon_user') {
-        setUser(e.newValue ? JSON.parse(e.newValue) : null);
+    const initAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } catch (e) {
+        setUser(null);
+      } finally {
+        setLoadingInitial(false);
       }
     };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    initAuth();
   }, []);
 
-  const login = (email: string, password?: string) => {
-    let role: Role = 'User';
-    if (email === 'AIVibeCoder@Grabon.com' && password === '3338582') {
-      role = 'Admin';
-    } else if (password) {
-      // Mock validation for normal user
-      if (password.length < 8) return false;
-      const hasUpper = /[A-Z]/.test(password);
-      const hasLower = /[a-z]/.test(password);
-      const hasNumber = /[0-9]/.test(password);
-      const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-      if (!(hasUpper && hasLower && hasNumber && hasSpecial)) return false;
+  const login = async (email: string, password?: string): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
-
-    const newUser = { email, role };
-    setUser(newUser);
-    localStorage.setItem('grabon_user', JSON.stringify(newUser));
-    return true;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('grabon_user');
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setUser(null);
+    } catch {
+      // Ignore err
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loadingInitial }}>
+      {!loadingInitial && children}
     </AuthContext.Provider>
   );
 }

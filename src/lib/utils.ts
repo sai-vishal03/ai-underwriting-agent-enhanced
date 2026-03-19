@@ -5,24 +5,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number) {
-  const full = new Intl.NumberFormat('en-IN', {
+export function formatIndianCurrency(amount: number) {
+  if (amount >= 10000000) {
+    return `₹${(amount / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
+  }
+  if (amount >= 100000) {
+    return `₹${(amount / 100000).toFixed(1).replace(/\.0$/, '')}L`;
+  }
+  if (amount >= 1000) {
+    return `₹${(amount / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  }
+  return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     maximumFractionDigits: 0,
   }).format(amount);
-
-  if (amount >= 10000000) {
-    const cr = (amount / 10000000).toFixed(2);
-    return `₹${cr} cr / ${full}`;
-  } else if (amount >= 100000) {
-    const lakhs = (amount / 100000).toFixed(2);
-    return `₹${lakhs} L / ${full}`;
-  }
-
-  return full;
 }
 
-export function formatLakhs(amount: number) {
-  return `₹${amount.toFixed(1)}L`;
+export function formatCompactNumber(amount: number) {
+  if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
+  if (amount >= 100000) return `₹${(amount / 100000).toFixed(1).replace(/\.0$/, '')}L`;
+  if (amount >= 1000) return `₹${(amount / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  return `₹${amount}`;
 }

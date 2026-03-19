@@ -12,9 +12,16 @@ import {
   LogOut,
   ChevronRight,
   Info,
-  Send
+  Send,
+  Database,
+  Download,
+  Upload,
+  RefreshCw,
+  IndianRupee
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface SidebarProps {
   activeView?: string;
@@ -26,6 +33,63 @@ export default function Sidebar({ activeView = 'dashboard', onViewChange }: Side
   const router = useRouter();
   const { user, logout } = useAuth();
   const isAdmin = user?.role === 'Admin';
+  
+  const queryClient = useQueryClient();
+  const [newDisbursedLimit, setNewDisbursedLimit] = React.useState('');
+  const [isResetting, setIsResetting] = React.useState(false);
+
+  const handleReset = async () => {
+    if (window.confirm("Are you sure you want to reset ALL data? This will restore the database to its initial state and cannot be undone.")) {
+      setIsResetting(true);
+      try {
+        await fetch('/api/admin/reset', { method: 'POST' });
+        await queryClient.invalidateQueries();
+        toast.success("Database restored to initial state successfully.");
+        if (onViewChange) onViewChange('dashboard');
+      } catch (e) {
+        toast.error("Failed to reset database.");
+      } finally {
+        setIsResetting(false);
+      }
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      const res = await fetch('/api/admin/export');
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `grabon_data_export_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      toast.success("Data exported successfully.");
+    } catch (e) {
+      toast.error("Failed to export data.");
+    }
+  };
+
+  const handleUpdateAmount = async () => {
+    const amount = Number(newDisbursedLimit);
+    if (!amount || isNaN(amount)) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    
+    try {
+      await fetch('/api/stats', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ totalDisbursedLimit: amount })
+      });
+      await queryClient.invalidateQueries({ queryKey: ['stats'] });
+      toast.success("Total Disbursed Limit updated successfully!");
+      setNewDisbursedLimit('');
+    } catch (e) {
+      toast.error("Failed to update limit.");
+    }
+  };
 
   const menuItems = [
     { id: 'about', label: 'About Website', icon: Info },
@@ -35,7 +99,7 @@ export default function Sidebar({ activeView = 'dashboard', onViewChange }: Side
   ];
 
   const adminItems = [
-    { id: 'add-partner', label: 'Add New Partner', icon: UserPlus },
+    { id: 'add-partner', label: 'Add New Merchant', icon: UserPlus },
     { id: 'whatsapp-outbox', label: 'WhatsApp Outbox', icon: Send },
     { id: 'logs', label: 'System Logs', icon: History },
   ];
@@ -104,6 +168,50 @@ export default function Sidebar({ activeView = 'dashboard', onViewChange }: Side
                 )}
               </button>
             ))}
+
+            <div className="mt-8 px-3 space-y-4">
+              <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider mb-2">Reset The Data</div>
+              
+              <button
+                onClick={handleReset}
+                disabled={isResetting}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-xl transition-all text-sm font-bold border border-rose-500/20"
+              >
+                {isResetting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
+                RESET EVERYTHING
+              </button>
+              
+              <button
+                onClick={handleExport}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-all text-sm font-bold border border-emerald-500/20"
+              >
+                <Download className="w-4 h-4" />
+                SAVE POINT
+              </button>
+            </div>
+
+            <div className="mt-8 px-3">
+              <div className="text-[11px] font-semibold text-zinc-600 uppercase tracking-wider mb-2">Update The Amount</div>
+              <div className="flex flex-col gap-2">
+                <div className="relative">
+                  <IndianRupee className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input 
+                    type="number"
+                    value={newDisbursedLimit}
+                    onChange={(e) => setNewDisbursedLimit(e.target.value)}
+                    placeholder="New limit"
+                    className="w-full bg-[#151515] border border-zinc-800 rounded-xl py-2 pl-9 pr-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#00ff84]/50"
+                  />
+                </div>
+                <button
+                  onClick={handleUpdateAmount}
+                  disabled={!newDisbursedLimit}
+                  className="w-full py-2 bg-[#1a1a1a] hover:bg-[#222] text-zinc-300 rounded-xl font-bold text-xs uppercase tracking-wider border border-zinc-800 hover:border-zinc-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Confirm Update
+                </button>
+              </div>
+            </div>
           </>
         )}
       </div>
@@ -123,7 +231,10 @@ export default function Sidebar({ activeView = 'dashboard', onViewChange }: Side
           <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400" />
         </button>
         <button
-          onClick={logout}
+          onClick={async () => {
+            await logout();
+            router.push('/login');
+          }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 hover:text-red-400 transition-all text-sm group"
         >
           <LogOut className="w-5 h-5" />

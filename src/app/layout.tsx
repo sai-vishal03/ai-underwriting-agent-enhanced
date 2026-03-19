@@ -4,6 +4,7 @@ import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { AuthProvider } from "@/components/auth/AuthContext";
 import { Toaster } from "sonner";
+import QueryProvider from "@/lib/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,19 +31,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0d0d0d] text-zinc-100 overflow-hidden`}
       >
-        <AuthProvider>
-          {children}
-          <Toaster 
-            position="top-right" 
-            theme="dark" 
-            expand={false} 
-            richColors 
-            closeButton
-            toastOptions={{
-              className: 'bg-[#121212] border border-zinc-800 text-zinc-100 rounded-2xl shadow-2xl',
-            }}
-          />
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            {children}
+            <Toaster 
+              position="top-right" 
+              theme="dark" 
+              expand={false} 
+              richColors 
+              closeButton
+              toastOptions={{
+                className: 'bg-[#121212] border border-zinc-800 text-zinc-100 rounded-2xl shadow-2xl',
+              }}
+            />
+          </AuthProvider>
+        </QueryProvider>
         <VisualEditsMessenger />
       </body>
     </html>

@@ -77,3 +77,12 @@ export interface AcceptedOffer {
   status: 'Accepted' | 'Pending Settlement' | 'Settled';
   amount: number;
 }
+
+export interface RiskMemo {
+  riskSummary: string;
+  keyRiskDrivers: string[];
+  financialRecommendation: string;
+  confidenceLevel: string;
+  confidence_score: number;  // 0–1 numeric ML-style score
+  risk_level: 'LOW' | 'MEDIUM' | 'HIGH';
+}

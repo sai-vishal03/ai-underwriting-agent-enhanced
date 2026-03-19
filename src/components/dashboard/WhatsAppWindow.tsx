@@ -8,9 +8,10 @@ import { cn } from '../../lib/utils';
 interface WhatsAppWindowProps {
   notifications: Notification[];
   selectedMerchant: Merchant | null;
+  onMinimize?: () => void;
 }
 
-export default function WhatsAppWindow({ notifications, selectedMerchant }: WhatsAppWindowProps) {
+export default function WhatsAppWindow({ notifications, selectedMerchant, onMinimize }: WhatsAppWindowProps) {
   const [showDetailsId, setShowDetailsId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +40,11 @@ export default function WhatsAppWindow({ notifications, selectedMerchant }: What
           <Video className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
           <Phone className="w-4 h-4 cursor-pointer hover:text-white transition-colors" />
           <div className="w-[1px] h-4 bg-zinc-700 mx-1" />
+          {onMinimize && (
+            <button onClick={onMinimize} className="hover:text-white transition-colors group">
+              <svg className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+          )}
           <MoreVertical className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
         </div>
       </div>

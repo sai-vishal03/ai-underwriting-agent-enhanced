@@ -1,0 +1,120 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Merchant {
+  id                    String   @id @default(cuid())
+  merchant_id           String   @unique
+  name                  String
+  whatsappNumber        String?
+  category              String
+  monthly_gmv_12m       String   // JSON array
+  coupon_redemption_rate Float
+  unique_customer_count Int
+  customer_return_rate  Float
+  avg_order_value       Float
+  seasonality_index     Float
+  deal_exclusivity_rate Float
+  return_and_refund_rate Float
+  status                String   @default("NEW")
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  underwriting          UnderwritingResult?
+  notifications         Notification[]
+}
+
+model UnderwritingResult {
+  id                      String   @id @default(cuid())
+  merchantId              String   @unique
+  merchant                Merchant @relation(fields: [merchantId], references: [merchant_id], onDelete: Cascade)
+  
+  // Credit Offer
+  credit_limit            Float
+  credit_interestRate     Float
+  credit_tenure           Int
+  credit_status           String
+  credit_tier             String
+  credit_rationale        String
+  credit_baseRate         Float
+  credit_riskPremium      Float
+  credit_volatilityAdj    Float
+  
+  // Insurance Offer
+  insurance_coverageAmount Float
+  insurance_premium       Float
+  insurance_policyType    String
+  insurance_status        String
+  insurance_tier          String
+  insurance_rationale     String
+
+  // Risk Metrics
+  riskScore               Int
+  pd                      Float
+  el                      Float
+  raroc                   Float
+  lgd                     Float
+
+  createdAt               DateTime @default(now())
+}
+
+model Notification {
+  id            String   @id @default(cuid())
+  merchantId    String
+  merchant      Merchant @relation(fields: [merchantId], references: [merchant_id], onDelete: Cascade)
+  merchantName  String
+  type          String   @default("WHATSAPP")
+  message       String
+  status        String   // "Sent" | "Pending"
+  createdAt     DateTime @default(now())
+}
+
+model SystemLog {
+  id            String   @id @default(cuid())
+  action        String
+  userRole      String   @default("Admin")
+  userEmail     String   @default("admin@grabon.in")
+  merchantId    String?
+  oldValue      String?
+  newValue      String?
+  ip            String   @default("127.0.0.1")
+  status        String   @default("success")
+  timestamp     DateTime @default(now())
+}
+
+model AcceptedOffer {
+  id            String   @id @default(cuid())
+  merchantId    String
+  merchantName  String
+  type          String   // "Credit" | "Insurance" | "Both"
+  status        String   @default("pending") // "pending" | "processing" | "completed" | "failed" | "retry_pending"
+  amount        Float
+  idempotencyKey String? @unique  // Prevent duplicate acceptance processing
+  createdAt     DateTime @default(now())
+  settledAt     DateTime?
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  action        String   // e.g. "OFFER_ACCEPTED", "MERCHANT_CREATED", "RISK_AI_GEN"
+  actorId       String?  // user.id or "SYSTEM"
+  actorRole     String?
+  merchantId    String?
+  entityId      String?  // e.g. AcceptedOffer.id
+  payload       String?  // JSON snapshot of the request/data
+  status        String   @default("SUCCESS") // "SUCCESS" | "FAILURE"
+  ipAddress     String?
+  timestamp     DateTime @default(now())
+}
+
+model PlatformStat {
+  id                  String   @id @default("singleton")
+  totalDisbursedLimit Float    @default(2500000)
+  alreadyDisbursed    Float    @default(0)
+}

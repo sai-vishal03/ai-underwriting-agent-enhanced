@@ -6,7 +6,8 @@ import {
   CreditCard, 
   Clock, 
   Activity,
-  Info
+  Info,
+  Network
 } from 'lucide-react';
 
 export default function AboutSection() {
@@ -28,12 +29,12 @@ export default function AboutSection() {
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
               <Shield className="w-24 h-24 text-white" />
             </div>
-            <div className="w-12 h-12 bg-[#00ff84]/10 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-[#00ff84]/10 rounded-2xl flex items-center justify-center mb-6 relative z-10">
               <Shield className="w-6 h-6 text-[#00ff84]" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-4 tracking-tight">AI Merchant Underwriting</h3>
-            <p className="text-zinc-500 leading-relaxed text-sm">
-              GrabOn's AI Core assesses institutional risk in real-time. We analyze over 50 data points per merchant—including GMV momentum, redemption quality, and customer loyalty—to generate pre-approved financial offers.
+            <h3 className="text-xl font-bold text-white mb-4 tracking-tight relative z-10">AI Merchant Underwriting</h3>
+            <p className="text-zinc-500 leading-relaxed text-sm relative z-10">
+              GrabOn's AI Core assesses institutional risk in real-time. We analyze over 50 data points per merchant—including GMV momentum, redemption quality, and customer loyalty—to generate pre-approved financial offers with precise Probabilities of Default (PD) and Expected Losses (EL).
             </p>
           </div>
 
@@ -41,12 +42,12 @@ export default function AboutSection() {
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
               <CreditCard className="w-24 h-24 text-white" />
             </div>
-            <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 relative z-10">
               <CreditCard className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-4 tracking-tight">GrabCredit & GrabInsurance</h3>
-            <p className="text-zinc-500 leading-relaxed text-sm">
-              Approved merchants receive immediate access to working capital (GrabCredit) and business interruption protection (GrabInsurance). Each offer is backed by a fully explainable AI rationale.
+            <h3 className="text-xl font-bold text-white mb-4 tracking-tight relative z-10">GrabCredit & GrabInsurance</h3>
+            <p className="text-zinc-500 leading-relaxed text-sm relative z-10">
+              Approved merchants receive immediate access to working capital (GrabCredit) and business interruption protection (GrabInsurance). Each offer is backed by a fully explainable rationale referencing their unique platform metrics and industry benchmarks.
             </p>
           </div>
 
@@ -54,25 +55,38 @@ export default function AboutSection() {
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
               <Activity className="w-24 h-24 text-white" />
             </div>
-            <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 relative z-10">
               <Activity className="w-6 h-6 text-purple-400" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-4 tracking-tight">Risk Tiering System</h3>
-            <p className="text-zinc-500 leading-relaxed text-sm">
-              Merchants are categorized into Tier 1 (Elite), Tier 2 (Growth), and Tier 3 (High Risk). This ensures that institutional capital is deployed efficiently based on verified performance metrics.
+            <h3 className="text-xl font-bold text-white mb-4 tracking-tight relative z-10">Risk Tiering System</h3>
+            <p className="text-zinc-500 leading-relaxed text-sm relative z-10">
+              Merchants are categorized into Tier 1 (Elite), Tier 2 (Growth), and Tier 3 (High Risk). This ensures that institutional capital is deployed efficiently. Our continuous monitoring systems observe changes to auto-adjust RAROC expectations.
             </p>
           </div>
 
-          <div className="bg-[#121212] border border-zinc-800 p-8 rounded-3xl relative overflow-hidden group">
+          <div className="bg-[#121212] border border-zinc-800 p-8 rounded-3xl relative overflow-hidden group md:col-span-2 lg:col-span-1">
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
               <Clock className="w-24 h-24 text-white" />
             </div>
-            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-6 relative z-10">
               <Clock className="w-6 h-6 text-amber-400" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-4 tracking-tight">Instant Settlement</h3>
-            <p className="text-zinc-500 leading-relaxed text-sm">
-              Accepting an offer triggers a mock NACH mandate. Funds reflect in the platform account immediately, with simulated disbursement cycles providing a realistic look at institutional cash flow.
+            <h3 className="text-xl font-bold text-white mb-4 tracking-tight relative z-10">Instant Settlement</h3>
+            <p className="text-zinc-500 leading-relaxed text-sm relative z-10">
+              Accepting an offer triggers a mock NACH mandate. Funds reflect in the platform account seamlessly (simulated 1-minute cycle), delivering a realistic portrayal of friction-free institutional financing via integrated neo-banking APIs.
+            </p>
+          </div>
+
+          <div className="bg-[#121212] border border-zinc-800 p-8 rounded-3xl relative overflow-hidden group md:col-span-2">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Network className="w-32 h-32 text-white" />
+            </div>
+            <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center mb-6 relative z-10">
+              <Network className="w-6 h-6 text-pink-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-4 tracking-tight relative z-10">Strategic Integration Frameworks</h3>
+            <p className="text-zinc-500 leading-relaxed text-sm relative z-10 max-w-2xl">
+              This platform bridges the gap between GrabOn's expansive merchant ecosystem and specialized financial partners. Our architecture simulates integrations with <strong>Poonawalla Fincorp</strong> (for credit deployment), <strong>Rakuten</strong> (for data synergy), <strong>PayU</strong> (for settlement execution), and <strong>InMobi</strong> (for dynamic targeting frameworks).
             </p>
           </div>
         </div>
