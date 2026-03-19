@@ -10,7 +10,7 @@ import {
   XCircle,
   Cpu
 } from 'lucide-react';
-import { formatCurrency } from '../../lib/utils';
+import { formatIndianCurrency } from '../../lib/utils';
 
 interface HeaderProps {
   stats: {
@@ -23,8 +23,8 @@ interface HeaderProps {
 
 export default function Header({ stats }: HeaderProps) {
   const cards = [
-    { label: 'Total Disbursed', value: formatCurrency(stats.totalDisbursed), icon: Wallet, color: 'text-[#00ff84]', bg: 'bg-[#00ff84]/10' },
-    { label: 'Pending Settlement', value: formatCurrency(stats.pendingSettlement), icon: Clock, color: 'text-amber-400', bg: 'bg-amber-400/10', sub: '(24 hr simulation)' },
+    { label: 'Total Disbursed', value: formatIndianCurrency(stats.totalDisbursed), icon: Wallet, color: 'text-[#00ff84]', bg: 'bg-[#00ff84]/10' },
+    { label: 'Pending Settlement', value: formatIndianCurrency(stats.pendingSettlement), icon: Clock, color: 'text-amber-400', bg: 'bg-amber-400/10', sub: '(24 hr simulation)' },
     { label: 'Total Approved', value: stats.totalApproved.toString(), icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
     { label: 'Total Rejected', value: stats.totalRejected.toString(), icon: XCircle, color: 'text-rose-400', bg: 'bg-rose-400/10' },
   ];
